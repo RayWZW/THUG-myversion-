@@ -42,9 +42,20 @@ function Menu(name, bannerUrl) {
         return panel;
     }
 
+    const tooltip = document.createElement('div');
+    tooltip.style.position = 'absolute';
+    tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    tooltip.style.color = '#FFF';
+    tooltip.style.padding = '5px';
+    tooltip.style.borderRadius = '4px';
+    tooltip.style.zIndex = '9999999';
+    tooltip.style.visibility = 'hidden'; 
+    tooltip.style.whiteSpace = 'nowrap';
+    document.body.appendChild(tooltip);
+
     Menu.addHtml = function(menu, html) {
         menu.insertAdjacentHTML('beforeend', html);
-    };    
+    };
 
     Menu.addSubtitle = function(menu, subtitle) {
         let subtitleElement = document.createElement('h3');
@@ -55,13 +66,13 @@ function Menu(name, bannerUrl) {
         subtitleElement.style.textAlign = 'center';
         subtitleElement.style.fontFamily = 'Courier New, monospace'; 
         menu.appendChild(subtitleElement);
-    };    
+    };
 
     let panel = createPanel(name);
 
     panel.settingsOpen = false;
 
-    Menu.addButton = function(targetMenu, title, toggle, enable, disable, enabled = false) {
+    Menu.addButton = function(targetMenu, title, toggle, enable, disable, enabled = false, tip = '') {
         let defaultColor = 'rgba(55, 55, 55, 0.75)';
         let hoverColor = 'rgba(25, 25, 25, 0.85)';
         let toggledColor = 'rgba(10, 10, 10, 0.75)';
@@ -91,16 +102,18 @@ function Menu(name, bannerUrl) {
         button.addEventListener("mouseover", () => {
             button.style.backgroundColor = hoverColor;
             button.style.outline = "1px solid #444";
+            tooltipTimeout = setTimeout(() => {
+                tooltip.textContent = tip;
+                tooltip.style.visibility = 'visible';
+            }, 1000); // Show tooltip after 1 second
         });
+
 
         button.addEventListener("mouseleave", () => {
             setTimeout(() => {
-                if (toggled) {
-                    button.style.backgroundColor = toggledColor; 
-                } else {
-                    button.style.backgroundColor = defaultColor; 
-                }
+                button.style.backgroundColor = toggled ? toggledColor : defaultColor; 
                 button.style.outline = "none";
+                tooltip.style.visibility = 'hidden'; // Hide tooltip
             }, 100);
         });
 
@@ -122,6 +135,11 @@ function Menu(name, bannerUrl) {
                     button.style.backgroundColor = defaultColor; 
                 }, 100);
             }
+        });
+
+        button.addEventListener('mousemove', (event) => {
+            tooltip.style.left = `${event.pageX + 10}px`; // Position tooltip slightly to the right of the cursor
+            tooltip.style.top = `${event.pageY + 10}px`; // Position tooltip slightly below the cursor
         });
 
         let settings = [];
