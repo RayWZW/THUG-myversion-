@@ -13,4 +13,4 @@ Welcome to **THUGWARE**! This is a fan-made custom version of the original proje
 - SPAM RAISE HAND
 - MUCH MORE
 
-THIS IS A FORK OF THE MAIN THUG REPOSITORY https://github.com/shratt/Thug/blob/main/Build/Thug.min.js
+paste the user.min.js into the browser console 
